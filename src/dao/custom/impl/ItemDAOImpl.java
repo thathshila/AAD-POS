@@ -3,6 +3,7 @@ package dao.custom.impl;
 import dao.custom.ItemDAO;
 import entity.Item;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,10 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemDAOImpl implements ItemDAO {
+
     @Override
     public boolean save(Item object, Connection connection) {
-        return false;
+        String query = "INSERT INTO item (item_code, item_name, quantity, unit_price) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setString(1, object.getItemId());
+            pst.setString(2, object.getItemName());
+            pst.setInt(3, Integer.parseInt(object.getItemQuantity()));
+            pst.setBigDecimal(4, new BigDecimal(object.getItemPrice()));
+
+            // Execute the update and return success status
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
+
 
     @Override
     public boolean update(Item object, Connection connection) throws SQLException {

@@ -124,6 +124,44 @@
         // Implement delete functionality if needed
     });
 
+    $(document).ready(function () {
+        // Fetch all items when the page loads
+        fetchAllItems();
+
+        $('#addItemButton').click(function () {
+            const itemData = {
+                item_code: $('#itemId').val(),
+                item_name: $('#itemName').val(),
+                quantity: $('#itemQuantity').val(),
+                unit_price: $('#itemPrice').val()
+            };
+
+            if (!itemData.item_code || !itemData.item_name || !itemData.quantity || !itemData.unit_price) {
+                alert("Please fill in all fields!");
+                return;
+            }
+
+            $.ajax({
+                url: 'http://localhost:8080/AAD_POS_Web_exploded/item',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(itemData),
+                success: function (response) {
+                    console.log("Item added successfully:", response);
+                    fetchAllItems();
+                    $('#itemForm')[0].reset();
+                    alert("Item added successfully!");
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error:", xhr.responseText);
+                    alert("Error adding item: " + xhr.responseText);
+                }
+            });
+        });
+
+    });
+
+
 </script>
 </body>
 </html>

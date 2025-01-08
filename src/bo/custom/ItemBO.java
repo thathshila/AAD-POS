@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ItemBO extends SuperBo {
     List<ItemDTO> getAllItems(BasicDataSource basicDataSource);
+    public boolean saveItem(BasicDataSource basicDataSource, ItemDTO itemDTO);
 }

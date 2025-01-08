@@ -38,4 +38,26 @@ public class ItemBOImpl implements ItemBO {
         return itemDTOs;
     }
 
+    @Override
+    public boolean saveItem(BasicDataSource basicDataSource, ItemDTO itemDTO) {
+
+        try (Connection connection = basicDataSource.getConnection()) {
+            // Convert the DTO to an Entity
+            Item item = new Item(
+                    itemDTO.getItemId(),
+                    itemDTO.getItemName(),
+                    itemDTO.getItemQuantity(),
+                    itemDTO.getItemPrice()
+            );
+
+            // Call DAO to save the item
+
+            return itemDAO.save(item, connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
