@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Form with Cart</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="web/styles/customer.css">
+</head>
+<body>
+<div class="container mt-5">
+    <!-- Customer Form -->
+    <div class="card shadow-lg">
+        <div class="card-header text-center bg-primary text-white">
+            <h2><i class="fas fa-user-plus me-2"></i>Customer Form</h2>
+        </div>
+        <div class="card-body">
+            <form id="customerForm">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="customerID" class="form-label">Customer ID</label>
+                        <input type="text" id="customerID" class="form-control" placeholder="Enter Customer ID" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="customerName" class="form-label">Full Name</label>
+                        <input type="text" id="customerName" class="form-control" placeholder="Enter Full Name" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="customerEmail" class="form-label">Email</label>
+                        <input type="email" id="customerEmail" class="form-control" placeholder="Enter Email Address" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="customerPhone" class="form-label">Phone Number</label>
+                        <input type="tel" id="customerPhone" class="form-control" placeholder="Enter Phone Number" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="customerAddress" class="form-label">Address</label>
+                        <textarea id="customerAddress" rows="3" class="form-control" placeholder="Enter Customer Address"></textarea>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="reset" class="btn btn-secondary me-2">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                    <button type="button" class="btn btn-primary" id="addToCartButton">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cart Section -->
+    <div class="card mt-4 shadow-lg">
+        <div class="card-header text-center bg-success text-white">
+            <h2><i class="fas fa-shopping-cart me-2"></i>Cart</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-hover text-center" id="cartTable">
+                <thead class="table-dark">
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Cart items will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="web/js/jquery-3.7.1.min.js"></script>
+<script>
+    // Fetch data when the page loads
+    $(document).ready(function () {
+        fetchData();
+    });
+
+    // // Fetch data and populate the cart table
+    function fetchData() {
+        $.ajax({
+            url: 'http://localhost:8080/AAD_POS_Web_exploded/customer', // Replace with your API endpoint
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                const tableBody = $('#cartTable tbody');
+                tableBody.empty(); // Clear existing rows
+
+                // Iterate over the fetched data and populate the table
+                data.forEach(customer => {
+                    const row = `
+                    <tr>
+                        <td>${customer.id}</td>
+                        <td>${customer.name}</td>
+                        <td>${customer.email}</td>
+                        <td>${customer.contact}</td>
+                        <td>${customer.address}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm delete-btn" data-id="${customer.id}">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                    tableBody.append(row);
+                });
+
+                // Add click event for delete buttons
+                $('.delete-btn').on('click', function () {
+                    const customerId = $(this).data('id');
+                    deleteCustomer(customerId);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching data:', error);
+                alert('Failed to fetch data. Please try again.');
+            }
+        });
+    }
+
+    // Function to delete a customer (optional)
+    function deleteCustomer(customerId) {
+        $.ajax({
+            url: `http://localhost:8080/AAD_POS_Web_exploded/customer/${customerId}`, // Replace with your API endpoint
+            type: 'DELETE',
+            success: function () {
+                alert('Customer deleted successfully');
+                fetchData(); // Refresh the table after deletion
+            },
+            error: function (xhr, status, error) {
+                console.error('Error deleting customer:', error);
+                alert('Failed to delete customer. Please try again.');
+            }
+        });
+    }
+
+
+    // $("#addToCartButton").click(function () {
+    //     const customer = {
+    //         id: $("#customerID").val(),
+    //         name: $("#customerName").val(),
+    //         email: $("#customerEmail").val(),
+    //         phone: $("#customerPhone").val(),
+    //         address: $("#customerAddress").val()
+    //     };
+    //
+    //     $.ajax({
+    //         url: "http://localhost:8080/AAD_POS_Web_exploded/customer",
+    //         method: "POST",
+    //         contentType: "application/json",
+    //         data: JSON.stringify(customer),
+    //         success: function (response) {
+    //             alert("Customer added successfully!");
+    //         },
+    //         error: function (xhr) {
+    //             alert("Error: " + xhr.responseText);
+    //         }
+    //     });
+    // });
+    // $("#addToCartButton").click(function () {
+    //     const customer = {
+    //         id: $("#customerID").val(),
+    //         name: $("#customerName").val(),
+    //         email: $("#customerEmail").val(),
+    //         phone: $("#customerPhone").val(),
+    //         address: $("#customerAddress").val()
+    //     };
+    //
+    //     $.ajax({
+    //         url: "http://localhost:8080/AAD_POS_Web_exploded/customer", // Ensure correct URL
+    //         method: "POST",
+    //         contentType: "application/json",
+    //         data: JSON.stringify(customer),
+    //         success: function (response) {
+    //             alert("Customer added successfully!");
+    //             fetchData(); // Refresh the table after adding
+    //         },
+    //         error: function (xhr, status, error) {
+    //             console.error("Error:", xhr.responseText);
+    //             alert("Error: " + xhr.responseText);
+    //         }
+    //     });
+    // });
+    $("#addToCartButton").click(function () {
+        const customer = {
+            customerId: $("#customerID").val(),
+            customerName: $("#customerName").val(),
+            customerEmail: $("#customerEmail").val(),
+            customerPhone: $("#customerPhone").val(),
+            customerAddress: $("#customerAddress").val()
+        };
+
+        $.ajax({
+            url: "http://localhost:8080/AAD_POS_Web_exploded/customer",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(customer),
+            success: function (response) {
+                alert("Customer added successfully!");
+                fetchData(); // Refresh the table after adding
+            },
+            error: function (xhr, status, error) {
+                console.error("Error:", xhr.responseText);
+                alert("Error: " + xhr.responseText);
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

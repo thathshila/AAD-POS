@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="AAD_POS:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/AAD_POS_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="AAD_POS/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="AAD_POS" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="commons-dbcp2-2.13.0" />
+          <element id="library" level="project" name="hibernate-core-6.6.4.Final" />
+          <element id="library" level="project" name="mysql-connector-j-8.3.0" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
