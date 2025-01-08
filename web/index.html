@@ -6,7 +6,6 @@
     <title>Customer Form with Cart</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="web/styles/customer.css">
 </head>
 <body>
@@ -85,9 +84,9 @@
 <script src="web/js/jquery-3.7.1.min.js"></script>
 <script>
     // Fetch data when the page loads
-    $(document).ready(function () {
-        fetchData();
-    });
+    // $(document).ready(function () {
+    //     fetchData();
+    // });
 
     // // Fetch data and populate the cart table
     function fetchData() {
@@ -130,6 +129,7 @@
             }
         });
     }
+    fetchData();
 
     // Function to delete a customer (optional)
     function deleteCustomer(customerId) {
@@ -147,53 +147,6 @@
         });
     }
 
-
-    // $("#addToCartButton").click(function () {
-    //     const customer = {
-    //         id: $("#customerID").val(),
-    //         name: $("#customerName").val(),
-    //         email: $("#customerEmail").val(),
-    //         phone: $("#customerPhone").val(),
-    //         address: $("#customerAddress").val()
-    //     };
-    //
-    //     $.ajax({
-    //         url: "http://localhost:8080/AAD_POS_Web_exploded/customer",
-    //         method: "POST",
-    //         contentType: "application/json",
-    //         data: JSON.stringify(customer),
-    //         success: function (response) {
-    //             alert("Customer added successfully!");
-    //         },
-    //         error: function (xhr) {
-    //             alert("Error: " + xhr.responseText);
-    //         }
-    //     });
-    // });
-    // $("#addToCartButton").click(function () {
-    //     const customer = {
-    //         id: $("#customerID").val(),
-    //         name: $("#customerName").val(),
-    //         email: $("#customerEmail").val(),
-    //         phone: $("#customerPhone").val(),
-    //         address: $("#customerAddress").val()
-    //     };
-    //
-    //     $.ajax({
-    //         url: "http://localhost:8080/AAD_POS_Web_exploded/customer", // Ensure correct URL
-    //         method: "POST",
-    //         contentType: "application/json",
-    //         data: JSON.stringify(customer),
-    //         success: function (response) {
-    //             alert("Customer added successfully!");
-    //             fetchData(); // Refresh the table after adding
-    //         },
-    //         error: function (xhr, status, error) {
-    //             console.error("Error:", xhr.responseText);
-    //             alert("Error: " + xhr.responseText);
-    //         }
-    //     });
-    // });
     $("#addToCartButton").click(function () {
         const customer = {
             customerId: $("#customerID").val(),

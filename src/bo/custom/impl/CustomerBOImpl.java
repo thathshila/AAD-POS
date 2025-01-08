@@ -71,21 +71,6 @@ public class CustomerBOImpl implements CustomerBO {
         }
     }
 
-//    @Override
-//    public List<CustomerDTO> getCustomers(BasicDataSource dataSource) throws SQLException {
-//        try (Connection connection = dataSource.getConnection()) {
-//            List<Customer> customers = customerDAO.getAll(connection);
-//            return customers.stream()
-//                    .map(customer -> new CustomerDTO(
-//                            customer.getCustomerId(),
-//                            customer.getCustomerName(),
-//                            customer.getCustomerAddress(),
-//                            customer.getCustomerEmail(),
-//                            customer.getCustomerPhone()
-//                    ))
-//                    .collect(Collectors.toList());
-//        }
-//    }
     @Override
     public List<CustomerDTO> getCustomers(BasicDataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {

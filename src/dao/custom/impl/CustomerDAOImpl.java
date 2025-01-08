@@ -27,19 +27,38 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public boolean update(Customer object, Connection connection) {
-        return false;
+    public boolean update(Customer customer, Connection connection) throws SQLException {
+        String sql = "UPDATE customer SET name = ?, address = ?, email = ?, contact = ? WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, customer.getCustomerName());
+            stmt.setString(2, customer.getCustomerAddress());
+            stmt.setString(3, customer.getCustomerEmail());
+            stmt.setString(4, customer.getCustomerPhone());
+            stmt.setString(5, customer.getCustomerId());
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // Return true if the update was successful (i.e., at least one row was updated)
+        }
     }
 
+
     @Override
-    public boolean delete(String object, Connection connection) {
-        return false;
+    public boolean delete(String customerId, Connection connection) throws SQLException {
+        String sql = "DELETE FROM customer WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, customerId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // Return true if a customer was deleted, false otherwise
+        }
     }
+
 
     @Override
     public List<Customer> getAll(Connection connection) {
         List<Customer> customerList = new ArrayList<>();
-        String query = "SELECT * FROM customers";  // Your SQL query here
+        String query = "SELECT * FROM customer";  // Your SQL query here
 
         try (PreparedStatement stmt = connection.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -50,7 +69,7 @@ public class CustomerDAOImpl implements CustomerDAO {
                 customer.setCustomerName(rs.getString("name"));
                 customer.setCustomerAddress(rs.getString("address"));
                 customer.setCustomerEmail(rs.getString("email"));
-                customer.setCustomerPhone(rs.getString("phone"));
+                customer.setCustomerPhone(rs.getString("contact"));
                 customerList.add(customer);
             }
         } catch (SQLException e) {

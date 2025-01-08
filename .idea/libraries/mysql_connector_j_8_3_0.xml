@@ -5,6 +5,7 @@
       <root url="jar://$PROJECT_DIR$/web/lib/jackson-annotations-2.15.2.jar!/" />
       <root url="jar://$PROJECT_DIR$/web/lib/jackson-core-2.15.2.jar!/" />
       <root url="jar://$PROJECT_DIR$/web/lib/jackson-databind-2.15.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/lib/javax.json-1.1.4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
