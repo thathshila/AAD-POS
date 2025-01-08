@@ -1,6 +1,7 @@
 package dao;
 
 import dao.custom.impl.CustomerDAOImpl;
+import dao.custom.impl.ItemDAOImpl;
 
 public class DaoFactory {
     private static DaoFactory daoFactory;
@@ -16,16 +17,18 @@ public class DaoFactory {
     }
 
     public enum DaoType {
-        CUSTOMER
+        CUSTOMER,ITEM
     }
 
     // Updated method to use generics for type safety
-    public <T extends SuperDao> T getDAO(DaoType daoType) {
+    public SuperDao getDAO(DaoType daoType) {
         switch (daoType) {
             case CUSTOMER:
-                return (T) new CustomerDAOImpl();
+                return  new CustomerDAOImpl();
+                case ITEM:
+                    return new ItemDAOImpl();
             default:
-                throw new IllegalArgumentException("Invalid DAO type");
+              return null;
         }
     }
 }
